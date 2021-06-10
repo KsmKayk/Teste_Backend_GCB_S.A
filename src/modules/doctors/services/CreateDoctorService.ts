@@ -72,12 +72,6 @@ class CreateDoctorService {
     cellphone,
     cep,
   }: IRequest): Promise<Doctor> {
-    let address = await axios.get(`http://cep.la/${cep}`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
     await RequestValidationWithoutExpertise.validate({
       name,
       crm,
@@ -102,6 +96,16 @@ class CreateDoctorService {
     }).catch(function (err) {
       throw new AppError(err.errors[0]);
     });
+
+    let address = await axios.get(`http://cep.la/${cep}`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    if (address.data.length === 0) {
+      throw new AppError('This cep is invalid');
+    }
 
     const doctor = await this.doctorsRepository.create({
       name,

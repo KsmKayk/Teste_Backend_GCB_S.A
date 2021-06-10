@@ -135,6 +135,18 @@ describe('CreateDoctor', () => {
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
+  it('should not be able to create a new doctor if cep is invalid', async () => {
+    await expect(
+      createDoctor.execute({
+        name: 'kayk',
+        cellphone: 12345678901,
+        telephone: 1234567890,
+        cep: 10000000,
+        crm: 1234567,
+        expertise: 'cardiologista, ortopedista',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
   it('should not be able to create a new doctor with less than 2 expertises', async () => {
     await expect(
       createDoctor.execute({
