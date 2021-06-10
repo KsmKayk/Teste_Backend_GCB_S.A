@@ -3,10 +3,9 @@ import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import axios from 'axios';
 
+import * as yup from 'yup';
 import Doctor from '../infra/typeorm/entities/Doctor';
 import IDoctorsRepository from '../repositories/IDoctorsRepository';
-
-import * as yup from 'yup';
 
 interface IRequest {
   name: string;
@@ -17,7 +16,7 @@ interface IRequest {
   expertise: string;
 }
 
-let RequestValidationWithoutExpertise = yup.object().shape({
+const RequestValidationWithoutExpertise = yup.object().shape({
   name: yup.string().required().max(120).min(3),
   crm: yup
     .number()
@@ -53,7 +52,7 @@ let RequestValidationWithoutExpertise = yup.object().shape({
     ),
   expertise: yup.string().required(),
 });
-let RequestValidationOnlyExpertise = yup.object().shape({
+const RequestValidationOnlyExpertise = yup.object().shape({
   expertise: yup.array().of(yup.string()).required().min(2),
 });
 
@@ -87,7 +86,7 @@ class CreateDoctorService {
       throw new AppError('Expertises must be separated by commas (,)!');
     }
 
-    var expertiseSplit = expertise.split(',').map(function (item) {
+    const expertiseSplit = expertise.split(',').map(function (item) {
       return item.trim();
     });
 
@@ -97,7 +96,39 @@ class CreateDoctorService {
       throw new AppError(err.errors[0]);
     });
 
-    let address = await axios.get(`http://cep.la/${cep}`, {
+    const indexedExpertises = [
+      'Alergologia',
+      'Angiologia',
+      'Buco maxilo',
+      'Cardiologia clínca',
+      'Cardiologia infantil',
+      'Cirurgia cabeça e pescoço',
+      'Cirurgia cardíaca',
+      'Cirurgia de tórax',
+    ];
+
+    expertiseSplit.map(item => {
+      let equal = false;
+      let i = 0;
+      while (i < indexedExpertises.length) {
+        if (item.toLowerCase() === indexedExpertises[i].toLowerCase()) {
+          equal = true;
+          break;
+        } else {
+          i += 1;
+        }
+      }
+
+      if (i === indexedExpertises.length && equal === false) {
+        throw new AppError(
+          'The sended expertises are incompatible with indexed expertises',
+        );
+      } else {
+        return item;
+      }
+    });
+
+    const address = await axios.get(`http://cep.la/${cep}`, {
       headers: {
         Accept: 'application/json',
       },

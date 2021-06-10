@@ -7,7 +7,7 @@ let createDoctor: CreateDoctorService;
 
 describe('CreateDoctor', () => {
   beforeEach(() => {
-    let fakeDoctorsRepository = new FakeDoctorsRepository();
+    const fakeDoctorsRepository = new FakeDoctorsRepository();
     createDoctor = new CreateDoctorService(fakeDoctorsRepository);
   });
 
@@ -18,7 +18,7 @@ describe('CreateDoctor', () => {
       telephone: 1234567890,
       cep: 25025320,
       crm: 1234567,
-      expertise: 'cardiologista,ortopedista',
+      expertise: 'Alergologia,Angiologia',
     });
 
     expect(doctor).toHaveProperty('id');
@@ -33,7 +33,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
     await expect(
@@ -43,7 +43,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -55,7 +55,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 12345678,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
     await expect(
@@ -65,7 +65,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 123456,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -77,7 +77,7 @@ describe('CreateDoctor', () => {
         telephone: 12345678901,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
     await expect(
@@ -87,7 +87,7 @@ describe('CreateDoctor', () => {
         telephone: 123456789,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -99,7 +99,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
     await expect(
@@ -109,7 +109,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -121,7 +121,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 250253201,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
     await expect(
@@ -131,7 +131,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 2502532,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -143,7 +143,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 10000000,
         crm: 1234567,
-        expertise: 'cardiologista, ortopedista',
+        expertise: 'Alergologia,Angiologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -155,7 +155,7 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista',
+        expertise: 'Alergologia',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -167,7 +167,19 @@ describe('CreateDoctor', () => {
         telephone: 1234567890,
         cep: 25025320,
         crm: 1234567,
-        expertise: 'cardiologista ortopedista',
+        expertise: 'Alergologia Angiologia',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+  it('should not be able to create a new doctor if sended expertises are incompatible with indexed expertises', async () => {
+    await expect(
+      createDoctor.execute({
+        name: 'kayk',
+        cellphone: 12345678901,
+        telephone: 1234567890,
+        cep: 25025320,
+        crm: 1234567,
+        expertise: 'Cardio, Neuro',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
