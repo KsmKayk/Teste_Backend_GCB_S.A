@@ -6,5 +6,8 @@ const doctorsRouter = Router();
 const doctorsController = new DoctorsController();
 
 doctorsRouter.post('/', doctorsController.create);
+doctorsRouter.get('/', doctorsController.findAll);
+doctorsRouter.delete('/:id', doctorsController.delete);
+doctorsRouter.patch('/:id', doctorsController.update);
 
 export default doctorsRouter;

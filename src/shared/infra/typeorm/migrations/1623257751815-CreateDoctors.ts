@@ -15,19 +15,19 @@ export class CreateDoctors1623257751815 implements MigrationInterface {
           },
           {
             name: 'name',
-            type: 'varchar(120)',
+            type: 'varchar',
           },
           {
             name: 'crm',
-            type: 'integer(7)',
+            type: 'integer',
           },
           {
             name: 'telephone',
-            type: 'integer(10)',
+            type: 'integer',
           },
           {
             name: 'cellphone',
-            type: 'integer(11)',
+            type: 'bigint',
           },
           {
             name: 'cep',

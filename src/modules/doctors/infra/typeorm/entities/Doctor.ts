@@ -7,8 +7,8 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
-@Entity('users')
-class User {
+@Entity('doctors')
+class Doctor {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -39,7 +39,7 @@ class User {
   @Column()
   district: string;
 
-  @Column('varchar', { array: true })
+  @Column()
   expertise: string;
 
   @CreateDateColumn()
@@ -52,4 +52,4 @@ class User {
   deleted_at?: Date;
 }
 
-export default User;
+export default Doctor;
