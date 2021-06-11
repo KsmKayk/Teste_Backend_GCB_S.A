@@ -5,6 +5,7 @@ import CreateDoctorService from '@modules/doctors/services/CreateDoctorService';
 import FindAllDoctorsService from '@modules/doctors/services/FindAllDoctorsService';
 import DeleteDoctorService from '@modules/doctors/services/DeleteDoctorService';
 import UpdateDoctorService from '@modules/doctors/services/UpdateDoctorService';
+import FindDoctorsService from '@modules/doctors/services/FindDoctorsService';
 
 export default class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -55,6 +56,13 @@ export default class SessionsController {
       crm,
       expertise,
     });
+    return response.json(doctor);
+  }
+
+  public async find(request: Request, response: Response): Promise<Response> {
+    const { type, value } = request.params;
+    const findDoctor = container.resolve(FindDoctorsService);
+    const doctor = await findDoctor.execute({ type, value });
     return response.json(doctor);
   }
 }
